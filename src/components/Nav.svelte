@@ -1,5 +1,19 @@
 <script>
-    export let items;
+    import { cart } from "../store";
+
+    let cartCount = 0;
+
+    cart.subscribe((cartVal) => {
+        let tCount = 0
+
+        for (const pid in cartVal) {
+            for (const vid in cartVal[pid]) {
+                tCount += cartVal[pid][vid]['quantity']
+            }
+        }
+
+        cartCount = tCount
+    })
 </script>
 
 <div class="navbar bg-base-100">
@@ -11,12 +25,12 @@
             <button tabindex="0" class="btn btn-ghost btn-circle">
                 <div class="indicator">
                     <i class="text-xl bi bi-cart" />
-                    <span class="badge badge-sm indicator-item">{items ?? 0}</span>
+                    <span class="badge badge-sm indicator-item">{cartCount}</span>
                 </div>
             </button>
             <div class="mt-3 card card-compact dropdown-content w-52 bg-base-100 shadow">
                 <div class="card-body">
-                    <span class="font-bold text-lg">{items ?? 0} Items</span>
+                    <span class="font-bold text-lg">{cartCount} Items</span>
                     <div class="card-actions">
                         <a href="/cart" class="btn btn-primary btn-block">View cart</a>
                     </div>

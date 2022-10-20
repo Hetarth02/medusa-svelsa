@@ -1,8 +1,73 @@
 <script>
-    export let value;
-    export let total;
-    export let quantity;
-    console.log([value, total, quantity]);
+    import Medusa from "@medusajs/medusa-js"
+    import { cart } from "../../store";
+
+    let total;
+
+    let baseUrl = "http://localhost:9000";
+
+    const medusa = new Medusa({ baseUrl: baseUrl, maxRetries: 3 })
+
+    cart.subscribe((cartVal) => {
+        let tTotal = 0
+
+        for (const pid in cartVal) {
+            for (const vid in cartVal[pid]) {
+                tTotal += cartVal[pid][vid]['prices'][1]['amount'] * cartVal[pid][vid]['quantity']
+            }
+        }
+
+        total = tTotal
+    })
+
+    const usRegionId = "reg_01GFRDGDD7DBP6JNVDG58RMNFW"
+
+    async function checkout() {
+        const cartResponse = await medusa.carts.create({
+            region_id: usRegionId
+        })
+
+        for (const pid in $cart) {
+            for (const vid in $cart[pid]) {
+                await medusa.carts.lineItems.create(cartResponse.cart.id, {
+                    variant_id: vid,
+                    quantity: $cart[pid][vid]['quantity']
+                })
+            }
+        }
+
+        const customerResponse = await medusa.customers.create({
+            first_name: 'Alec',
+            last_name: 'Reynolds',
+            email: 'user@example.com',
+            password: 'supersecret'
+        })
+
+        await medusa.carts.update(cartResponse.cart.id, {
+            customer_id: customerResponse.customer.id,
+            shipping_address: {
+                first_name: "Arno",
+                last_name: "Willms",
+                address_1: "14433 Kemmer Court",
+                address_2: "Suite 369",
+                city: "South Geoffreyview",
+                country_code: "us",
+                province: "Kentucky",
+                postal_code: "72093",
+                phone: "16128234334802"
+            },
+        })
+
+        medusa.carts.createPaymentSessions(cartResponse.cart.id)
+            .then(({ cart }) => {
+                console.log(cart.payment_sessions)
+
+                medusa.carts.complete(cart.id)
+                    .then(({ type, data }) => {
+                        console.log(type, data);
+                    })
+            })
+    }
 </script>
 
 <section>
@@ -19,73 +84,44 @@
                     </div>
 
                     <div class="mt-8">
-                        <p class="text-2xl font-medium tracking-tight">$99.99</p>
+                        <p class="text-2xl font-medium tracking-tight">${total}</p>
                         <p class="mt-1 text-sm text-gray-500">For the purchase of</p>
                     </div>
 
                     <div class="mt-12">
                         <div class="flow-root">
                             <ul class="-my-4 divide-y divide-gray-200">
-                                <li class="flex items-center justify-between py-4">
-                                    <div class="flex items-start">
-                                        <img
-                                            alt="Trainer"
-                                            src="https://images.unsplash.com/photo-1565299999261-28ba859019bb?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=774&q=80"
-                                            class="h-16 w-16 flex-shrink-0 rounded-lg object-cover"
-                                        />
+                                {#each Object.values($cart) as product}
+                                    {#each Object.values(product) as variant}
+                                        <li class="flex items-center justify-between py-4">
+                                            <div class="flex items-start">
+                                                <img
+                                                    alt="Trainer"
+                                                    src="{variant.product.thumbnail}"
+                                                    class="h-16 w-16 flex-shrink-0 rounded-lg object-cover"
+                                                />
 
-                                        <div class="ml-4">
-                                            <p class="text-sm">Vibrant Trainers</p>
+                                                <div class="ml-4">
+                                                    <p class="text-sm">{variant.product.title}</p>
 
-                                            <dl class="mt-1 space-y-1 text-xs text-gray-500">
-                                                <div>
-                                                    <dt class="inline">Color:</dt>
-                                                    <dd class="inline">Blue</dd>
+                                                    <dl class="mt-1 space-y-1 text-xs text-gray-500">
+                                                        <div>
+                                                            <dt class="inline">Size / Color:</dt>
+                                                            <dd class="inline">{variant.title}</dd>
+                                                        </div>
+                                                    </dl>
                                                 </div>
+                                            </div>
 
-                                                <div>
-                                                    <dt class="inline">Size:</dt>
-                                                    <dd class="inline">UK 10</dd>
-                                                </div>
-                                            </dl>
-                                        </div>
-                                    </div>
-
-                                    <div>
-                                        <p class="text-sm">
-                                            $49.99
-                                            <small class="text-gray-500">x1</small>
-                                        </p>
-                                    </div>
-                                </li>
-
-                                <li class="flex items-center justify-between py-4">
-                                    <div class="flex items-start">
-                                        <img
-                                            alt="Lettuce"
-                                            src="https://images.unsplash.com/photo-1640958904159-51ae08bd3412?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1771&q=80"
-                                            class="h-16 w-16 flex-shrink-0 rounded-lg object-cover"
-                                        />
-
-                                        <div class="ml-4">
-                                            <p class="text-sm">Lettuce</p>
-
-                                            <dl class="mt-1 space-y-1 text-xs text-gray-500">
-                                                <div>
-                                                    <dt class="inline">Size:</dt>
-                                                    <dd class="inline">Big</dd>
-                                                </div>
-                                            </dl>
-                                        </div>
-                                    </div>
-
-                                    <div>
-                                        <p class="text-sm">
-                                            $25
-                                            <small class="text-gray-500">x2</small>
-                                        </p>
-                                    </div>
-                                </li>
+                                            <div>
+                                                <p class="text-sm">
+                                                    ${variant.prices[1].amount * variant.quantity}
+                                                    <small class="text-gray-500">x{variant.quantity}</small>
+                                                </p>
+                                            </div>
+                                        </li>
+                                    {/each}
+                                {/each}
                             </ul>
                         </div>
                     </div>
@@ -186,6 +222,7 @@
                             <button
                                 class="block w-full rounded-lg bg-black p-2.5 text-sm text-white"
                                 type="button"
+                                on:click={checkout}
                             >
                                 Pay Now
                             </button>

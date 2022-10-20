@@ -1,20 +1,42 @@
 <script>
+    import {cart} from '../../../store'
+
     export let data;
     let productDetail = data;
     let selected = 0;
-    let cart = {}
 
     function addToCart() {
         let vid = productDetail.variants[selected].id
-        
-        if (cart[vid]) {
-            cart[vid]['quantity'] += 1
+
+        const newCartVal = {...$cart}
+
+        if (newCartVal[productDetail.id]) {
+            if (newCartVal[productDetail.id][vid]) {
+                newCartVal[productDetail.id][vid]['quantity'] += 1
+            } else {
+                newCartVal[productDetail.id][vid] = {
+                    ...productDetail.variants[selected],
+                    product: {
+                        title: productDetail.title,
+                        thumbnail: productDetail.thumbnail,
+                    },
+                    quantity: 1
+                }
+            }
         } else {
-            cart[vid] = {
-                vid: vid,
-                quantity: 1
+            newCartVal[productDetail.id] = {
+                [vid]: {
+                    ...productDetail.variants[selected],
+                    product: {
+                        title: productDetail.title,
+                        thumbnail: productDetail.thumbnail,
+                    },
+                    quantity: 1
+                }
             }
         }
+
+        cart.set(newCartVal)
     }
 </script>
 
