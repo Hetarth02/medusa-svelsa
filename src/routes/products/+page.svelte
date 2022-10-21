@@ -5,7 +5,7 @@
     export let data;
 
     if ($products.length == 0) {
-        products.set(data)
+        products.set(data);
     }
 </script>
 

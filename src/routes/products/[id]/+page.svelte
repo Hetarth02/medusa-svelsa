@@ -1,18 +1,18 @@
 <script>
-    import {cart} from '../../../store'
+    import { cart } from "../../../store";
 
     export let data;
     let productDetail = data;
     let selected = 0;
 
     function addToCart() {
-        let vid = productDetail.variants[selected].id
+        let vid = productDetail.variants[selected].id;
 
-        const newCartVal = {...$cart}
+        const newCartVal = { ...$cart };
 
         if (newCartVal[productDetail.id]) {
             if (newCartVal[productDetail.id][vid]) {
-                newCartVal[productDetail.id][vid]['quantity'] += 1
+                newCartVal[productDetail.id][vid]["quantity"] += 1;
             } else {
                 newCartVal[productDetail.id][vid] = {
                     ...productDetail.variants[selected],
@@ -20,8 +20,8 @@
                         title: productDetail.title,
                         thumbnail: productDetail.thumbnail,
                     },
-                    quantity: 1
-                }
+                    quantity: 1,
+                };
             }
         } else {
             newCartVal[productDetail.id] = {
@@ -31,12 +31,12 @@
                         title: productDetail.title,
                         thumbnail: productDetail.thumbnail,
                     },
-                    quantity: 1
-                }
-            }
+                    quantity: 1,
+                },
+            };
         }
 
-        cart.set(newCartVal)
+        cart.set(newCartVal);
     }
 </script>
 
@@ -86,13 +86,13 @@
 
                 <div class="mt-8">
                     <div class="mt-4">
-                        <legend class="mb-1 text-sm font-medium">Size / Color</legend>                        
+                        <legend class="mb-1 text-sm font-medium">Size / Color</legend>
                         ${#if productDetail.variants.length}
                             {productDetail.variants[selected].prices[1].amount}
                         {:else}
                             0
                         {/if}
-                        
+
                         <div class="flow-root mt-3">
                             <div class="-m-0.5 flex flex-wrap">
                                 {#each productDetail.variants as variant, idx}

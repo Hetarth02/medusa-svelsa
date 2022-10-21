@@ -1,47 +1,47 @@
 <script>
-    import Medusa from "@medusajs/medusa-js"
+    import Medusa from "@medusajs/medusa-js";
     import { cart } from "../../store";
 
     let total;
 
     let baseUrl = "http://localhost:9000";
 
-    const medusa = new Medusa({ baseUrl: baseUrl, maxRetries: 3 })
+    const medusa = new Medusa({ baseUrl: baseUrl, maxRetries: 3 });
 
     cart.subscribe((cartVal) => {
-        let tTotal = 0
+        let tTotal = 0;
 
         for (const pid in cartVal) {
             for (const vid in cartVal[pid]) {
-                tTotal += cartVal[pid][vid]['prices'][1]['amount'] * cartVal[pid][vid]['quantity']
+                tTotal += cartVal[pid][vid]["prices"][1]["amount"] * cartVal[pid][vid]["quantity"];
             }
         }
 
-        total = tTotal
-    })
+        total = tTotal;
+    });
 
-    const usRegionId = "reg_01GFRDGDD7DBP6JNVDG58RMNFW"
+    const usRegionId = "reg_01GFRDGDD7DBP6JNVDG58RMNFW";
 
     async function checkout() {
         const cartResponse = await medusa.carts.create({
-            region_id: usRegionId
-        })
+            region_id: usRegionId,
+        });
 
         for (const pid in $cart) {
             for (const vid in $cart[pid]) {
                 await medusa.carts.lineItems.create(cartResponse.cart.id, {
                     variant_id: vid,
-                    quantity: $cart[pid][vid]['quantity']
-                })
+                    quantity: $cart[pid][vid]["quantity"],
+                });
             }
         }
 
         const customerResponse = await medusa.customers.create({
-            first_name: 'Alec',
-            last_name: 'Reynolds',
-            email: 'user@example.com',
-            password: 'supersecret'
-        })
+            first_name: "Alec",
+            last_name: "Reynolds",
+            email: "user@example.com",
+            password: "supersecret",
+        });
 
         await medusa.carts.update(cartResponse.cart.id, {
             customer_id: customerResponse.customer.id,
@@ -54,19 +54,17 @@
                 country_code: "us",
                 province: "Kentucky",
                 postal_code: "72093",
-                phone: "16128234334802"
+                phone: "16128234334802",
             },
-        })
+        });
 
-        medusa.carts.createPaymentSessions(cartResponse.cart.id)
-            .then(({ cart }) => {
-                console.log(cart.payment_sessions)
+        medusa.carts.createPaymentSessions(cartResponse.cart.id).then(({ cart }) => {
+            console.log(cart.payment_sessions);
 
-                medusa.carts.complete(cart.id)
-                    .then(({ type, data }) => {
-                        console.log(type, data);
-                    })
-            })
+            medusa.carts.complete(cart.id).then(({ type, data }) => {
+                console.log(type, data);
+            });
+        });
     }
 </script>
 
@@ -97,14 +95,16 @@
                                             <div class="flex items-start">
                                                 <img
                                                     alt="Trainer"
-                                                    src="{variant.product.thumbnail}"
+                                                    src={variant.product.thumbnail}
                                                     class="h-16 w-16 flex-shrink-0 rounded-lg object-cover"
                                                 />
 
                                                 <div class="ml-4">
                                                     <p class="text-sm">{variant.product.title}</p>
 
-                                                    <dl class="mt-1 space-y-1 text-xs text-gray-500">
+                                                    <dl
+                                                        class="mt-1 space-y-1 text-xs text-gray-500"
+                                                    >
                                                         <div>
                                                             <dt class="inline">Size / Color:</dt>
                                                             <dd class="inline">{variant.title}</dd>
@@ -116,7 +116,9 @@
                                             <div>
                                                 <p class="text-sm">
                                                     ${variant.prices[1].amount * variant.quantity}
-                                                    <small class="text-gray-500">x{variant.quantity}</small>
+                                                    <small class="text-gray-500"
+                                                        >x{variant.quantity}</small
+                                                    >
                                                 </p>
                                             </div>
                                         </li>
