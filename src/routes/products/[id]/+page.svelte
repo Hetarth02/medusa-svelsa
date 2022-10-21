@@ -1,7 +1,43 @@
 <script>
-    let selected;
+    import {cart} from '../../../store'
+
     export let data;
     let productDetail = data;
+    let selected = 0;
+
+    function addToCart() {
+        let vid = productDetail.variants[selected].id
+
+        const newCartVal = {...$cart}
+
+        if (newCartVal[productDetail.id]) {
+            if (newCartVal[productDetail.id][vid]) {
+                newCartVal[productDetail.id][vid]['quantity'] += 1
+            } else {
+                newCartVal[productDetail.id][vid] = {
+                    ...productDetail.variants[selected],
+                    product: {
+                        title: productDetail.title,
+                        thumbnail: productDetail.thumbnail,
+                    },
+                    quantity: 1
+                }
+            }
+        } else {
+            newCartVal[productDetail.id] = {
+                [vid]: {
+                    ...productDetail.variants[selected],
+                    product: {
+                        title: productDetail.title,
+                        thumbnail: productDetail.thumbnail,
+                    },
+                    quantity: 1
+                }
+            }
+        }
+
+        cart.set(newCartVal)
+    }
 </script>
 
 <section>
@@ -31,7 +67,13 @@
                         <h1 class="text-2xl font-bold">{productDetail.title}</h1>
                     </div>
 
-                    <p class="text-lg font-bold">${selected ?? 0}</p>
+                    <p class="text-lg font-bold">
+                        ${#if productDetail.variants.length}
+                            {productDetail.variants[selected].prices[1].amount}
+                        {:else}
+                            0
+                        {/if}
+                    </p>
                 </div>
 
                 <div class="group relative mt-4">
@@ -44,23 +86,28 @@
 
                 <div class="mt-8">
                     <div class="mt-4">
-                        <legend class="mb-1 text-sm font-medium">Size / Color</legend>
-                        {selected}
-                        <div class="flow-root">
+                        <legend class="mb-1 text-sm font-medium">Size / Color</legend>                        
+                        ${#if productDetail.variants.length}
+                            {productDetail.variants[selected].prices[1].amount}
+                        {:else}
+                            0
+                        {/if}
+                        
+                        <div class="flow-root mt-3">
                             <div class="-m-0.5 flex flex-wrap">
-                                {#each productDetail.variants as variant}
-                                    <label for={variant.title} class="cursor-pointer p-0.5">
+                                {#each productDetail.variants as variant, idx}
+                                    <label for={variant.title} class="cursor-pointer p-1">
                                         <input
                                             type="radio"
                                             name="size"
                                             bind:group={selected}
                                             id={variant.title}
                                             class="peer sr-only"
-                                            value={variant.prices[1].amount}
+                                            value={idx}
                                         />
 
                                         <span
-                                            class="group inline-flex h-8 w-8 items-center justify-center rounded-full border text-xs font-medium peer-checked:bg-black peer-checked:text-white"
+                                            class="group inline-flex h-12 w-12 items-center justify-center text-center rounded-full border text-xs font-medium peer-checked:bg-black peer-checked:text-white"
                                         >
                                             {variant.title}
                                         </span>
@@ -72,8 +119,9 @@
 
                     <div class="mt-8 flex">
                         <button
+                            on:click={addToCart}
                             type="button"
-                            class="ml-3 block rounded bg-green-600 px-5 py-3 text-xs font-medium text-white hover:bg-green-500"
+                            class="block rounded bg-green-600 px-5 py-3 text-sm font-medium text-white hover:bg-green-500"
                         >
                             Add to Cart
                         </button>

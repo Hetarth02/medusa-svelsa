@@ -1,7 +1,12 @@
 <script>
     import Product from "../../components/Product.svelte";
+    import { products } from "../../store";
 
     export let data;
+
+    if ($products.length == 0) {
+        products.set(data)
+    }
 </script>
 
 <section>
