@@ -1,12 +1,11 @@
 <script>
-    import Medusa from "@medusajs/medusa-js";
     import { cart } from "../../store";
 
+    export let data;
+
+    const { medusa, usRegionId } = data;
+
     let total;
-
-    let baseUrl = "http://localhost:9000";
-
-    const medusa = new Medusa({ baseUrl: baseUrl, maxRetries: 3 });
 
     cart.subscribe((cartVal) => {
         let tTotal = 0;
@@ -19,8 +18,6 @@
 
         total = tTotal;
     });
-
-    const usRegionId = "reg_01GFRDGDD7DBP6JNVDG58RMNFW";
 
     async function checkout() {
         const cartResponse = await medusa.carts.create({
@@ -36,10 +33,11 @@
             }
         }
 
+        let rand_num = Math.floor(Math.random() * 10000);
         const customerResponse = await medusa.customers.create({
             first_name: "Alec",
             last_name: "Reynolds",
-            email: "user@example.com",
+            email: `user${rand_num}@example.com`,
             password: "supersecret",
         });
 
@@ -59,16 +57,15 @@
         });
 
         medusa.carts.createPaymentSessions(cartResponse.cart.id).then(({ cart }) => {
-            console.log(cart.payment_sessions);
-
             medusa.carts.complete(cart.id).then(({ type, data }) => {
-                console.log(type, data);
+                alert("Order Placed Successfully!");
+                window.location = "/";
             });
         });
     }
 </script>
 
-<section>
+<section class="m-4 p-4">
     <h1 class="sr-only">Checkout</h1>
 
     <div class="relative mx-auto max-w-screen-2xl">
@@ -76,9 +73,13 @@
             <div class="bg-gray-50 py-12 md:py-24">
                 <div class="mx-auto max-w-lg px-4 lg:px-8">
                     <div class="flex items-center">
-                        <span class="h-10 w-10 rounded-full bg-blue-900" />
+                        <img
+                            src="https://avatars.dicebear.com/api/micah/1.svg"
+                            class="h-10 w-10 rounded-full bg-blue-900"
+                            alt="Profile"
+                        />
 
-                        <h2 class="ml-4 font-medium">BambooYou</h2>
+                        <h2 class="ml-4 font-medium">John Doe</h2>
                     </div>
 
                     <div class="mt-8">
@@ -141,6 +142,7 @@
                             <input
                                 class="w-full rounded-lg border-gray-200 p-2.5 text-sm shadow-sm"
                                 type="text"
+                                placeholder="John"
                                 id="first_name"
                             />
                         </div>
@@ -153,6 +155,7 @@
                             <input
                                 class="w-full rounded-lg border-gray-200 p-2.5 text-sm shadow-sm"
                                 type="text"
+                                placeholder="Doe"
                                 id="last_name"
                             />
                         </div>
@@ -165,6 +168,7 @@
                             <input
                                 class="w-full rounded-lg border-gray-200 p-2.5 text-sm shadow-sm"
                                 type="email"
+                                placeholder="john@mailinator.com"
                                 id="email"
                             />
                         </div>
@@ -177,6 +181,7 @@
                             <input
                                 class="w-full rounded-lg border-gray-200 p-2.5 text-sm shadow-sm"
                                 type="tel"
+                                placeholder="1234567890"
                                 id="phone"
                             />
                         </div>
@@ -221,13 +226,15 @@
                         </fieldset>
 
                         <div class="col-span-6">
-                            <button
-                                class="block w-full rounded-lg bg-black p-2.5 text-sm text-white"
-                                type="button"
-                                on:click={checkout}
-                            >
-                                Pay Now
-                            </button>
+                            {#if total > 0}
+                                <button
+                                    class="block w-full rounded-lg bg-black p-2.5 text-sm text-white"
+                                    type="button"
+                                    on:click={checkout}
+                                >
+                                    Pay Now
+                                </button>
+                            {/if}
                         </div>
                     </form>
                 </div>
