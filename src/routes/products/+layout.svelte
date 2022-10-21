@@ -1,7 +1,10 @@
 <script>
     import Nav from "../../components/Nav.svelte";
+    export let theme;
 </script>
 
-<Nav />
+<div data-theme={theme ?? "light"}>
+    <Nav bind:new_theme={theme} />
 
-<slot />
+    <slot />
+</div>

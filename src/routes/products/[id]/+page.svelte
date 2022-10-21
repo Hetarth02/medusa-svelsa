@@ -107,7 +107,7 @@
                                         />
 
                                         <span
-                                            class="group inline-flex h-12 w-12 items-center justify-center text-center rounded-full border text-xs font-medium peer-checked:bg-black peer-checked:text-white"
+                                            class="group inline-flex h-12 w-12 items-center justify-center text-center rounded-full border text-xs font-medium peer-checked:bg-info peer-checked:text-white"
                                         >
                                             {variant.title}
                                         </span>
@@ -121,7 +121,7 @@
                         <button
                             on:click={addToCart}
                             type="button"
-                            class="block rounded bg-green-600 px-5 py-3 text-sm font-medium text-white hover:bg-green-500"
+                            class="block rounded bg-green-600 px-5 py-3 text-sm font-medium text-white hover:bg-success"
                         >
                             Add to Cart
                         </button>

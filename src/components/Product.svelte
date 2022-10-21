@@ -16,5 +16,16 @@
         src={productData.thumbnail}
         class="-mt-3 h-96 w-full object-cover"
     />
-    <h3 class="mt-4 text-lg text-black/90">{productData.title}</h3>
+    <h3 class="m-4 text-lg">{productData.title}</h3>
 </a>
+
+<style>
+    a {
+        box-shadow: none;
+        transition: 300ms ease;
+    }
+
+    a:hover {
+        box-shadow: 5px 5px 0px 3px;
+    }
+</style>

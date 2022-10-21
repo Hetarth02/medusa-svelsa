@@ -1,42 +1,61 @@
-# medusa-sveltekit
-MedusaJs based ecommerce template written in sveltekit
+# Svelsa - A starter storefront template in Sveltekit
+![Medusa Hackathon 2022](static/hackathon-banner.png)
 
+# About
 
-# create-svelte
+## Participants
 
-Everything you need to build a Svelte project, powered by [`create-svelte`](https://github.com/sveltejs/kit/tree/master/packages/create-svelte).
+| Name           | Github                                              | Twitter    |
+| -------------- | --------------------------------------------------- | ---------- |
+| Hetarth Shah   | [@Hetarth02](https://github.com/Hetarth02/)         | @Hetarth02 |
+| Sanjay Boricha | [@SanjayBoricha](https://github.com/SanjayBoricha/) | -          |
 
-## Creating a project
+# Description
 
-If you're seeing this, you've probably already done this step. Congrats!
+An open source storefront built using `MedusaJs` and `Sveltekit` coupled with `DaisyUI(TailwindCSS)` and with lots of swappable themes. Moreover, you can also create your own themes and integrate it by following this [steps](https://daisyui.com/theme-generator/). Currently, It includes products listing, products screen, cart, checkout and payment.
+
+# Preview
+
+![1](readme_assets/1.png)
+![2](readme_assets/2.png)
+![3](readme_assets/3.png)
+![4](readme_assets/4.png)
+![5](readme_assets/5.png)
+
+# Project Setup
+
+## Prerequisites
+
+Before you start with the tutorial make sure you have
+
+- [Node.js](https://nodejs.org/en/) v14 or greater installed on your machine
+- [Medusa server](https://docs.medusajs.com/quickstart/quick-start/) v14 or greater installed on your machine
+
+## Install Project
+
+> Make sure to start the medusa server.
+
+1. Clone the repository:
 
 ```bash
-# create a new project in the current directory
-npm create svelte@latest
-
-# create a new project in my-app
-npm create svelte@latest my-app
+git clone https://github.com/Hetarth02/medusa-sveltekit.git
 ```
 
-## Developing
-
-Once you've created a project and installed dependencies with `npm install` (or `pnpm install` or `yarn`), start a development server:
-
+2. Change directory and install dependencies:
 ```bash
+cd medusa-sveltekit
+npm i
+```
+
+3.  Start the app
+```
 npm run dev
-
-# or start the server and open the app in a new browser tab
-npm run dev -- --open
 ```
 
-## Building
-
-To create a production version of your app:
-
-```bash
-npm run build
-```
-
-You can preview the production build with `npm run preview`.
-
-> To deploy your app, you may need to install an [adapter](https://kit.svelte.dev/docs/adapters) for your target environment.
+## Resources
+- [Medusa’s GitHub repository](https://github.com/medusajs/medusa)
+- [Medusa Storefront](https://docs.medusajs.com/api/store/)
+- [Medusa Documentation](https://docs.medusajs.com/)
+- [TailwindCSS Documentation](https://tailwindcss.com/docs/installation)
+- [DaisyUI Documentation](https://daisyui.com/components/)
+- [DaisyUI Custom Theme Generation Documentation](https://daisyui.com/theme-generator/)

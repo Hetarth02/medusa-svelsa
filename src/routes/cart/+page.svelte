@@ -65,7 +65,7 @@
     }
 </script>
 
-<section class="m-4 p-4">
+<section>
     <h1 class="sr-only">Checkout</h1>
 
     <div class="relative mx-auto max-w-screen-2xl">
