@@ -5,10 +5,10 @@
 
 ## Participants
 
-| Name           | Github                                              | Twitter    | Discord        |
-| -------------- | --------------------------------------------------- | ---------- | -------------- |
-| Hetarth Shah   | [@Hetarth02](https://github.com/Hetarth02/)         | @Hetarth02 | Hetarth02#3646 |
-| Sanjay Boricha | [@SanjayBoricha](https://github.com/SanjayBoricha/) | -          | Sanjay#6692    |
+| Name           | Github         | Twitter                                     | Discord        |
+| -------------- | -------------- | ------------------------------------------- | -------------- |
+| Hetarth Shah   | @Hetarth02     | [@Hetarth02](https://twitter.com/Hetarth02) | Hetarth02#3646 |
+| Sanjay Boricha | @SanjayBoricha | -                                           | Sanjay#6692    |
 
 # Description
 
